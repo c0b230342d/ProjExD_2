@@ -6,7 +6,6 @@ import pygame as pg
 
 
 WIDTH, HEIGHT = 1600, 900
-# accs = [a for a in range(1, 11)]
 DELTA = {  # 移動量辞書
     pg.K_UP: (0, -5), 
     pg.K_DOWN: (0, +5), 
@@ -35,7 +34,7 @@ def move_kk() -> dict:
     戻り値：辞書（押下キーに対する移動量の合計タプルをキー）
     """
     # kk = tuple(x)
-    MODEL = {
+    MODEL = {  # 各方向のこうかとんのsurfaceの辞書
         (-5, 0): pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0),
         (-5, +5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 45, 2.0),
         (0, +5): pg.transform.rotozoom(pg.transform.flip(pg.image.load("fig/3.png"), True, False), -90, 2.0),
@@ -46,6 +45,16 @@ def move_kk() -> dict:
         (-5, -5): pg.transform.rotozoom(pg.image.load("fig/3.png"), -45, 2.0),
     }
     return MODEL
+
+
+def add_accs_scale() -> tuple:
+    accs = [a for a in range(1, 11)]
+    bb_images = []
+    for r in range(1, 11):
+        bb_img = pg.Surface((20*r, 20*r))
+        pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
+        bb_images.append(bb_img)
+    return accs, bb_images
 
 
 def game_over(screen) -> None:
