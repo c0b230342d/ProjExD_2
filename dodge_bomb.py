@@ -14,6 +14,20 @@ DELTA = {  # 移動量辞書
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
+def check_bound(rct: pg.rect) -> tuple[bool, bool]:
+    """
+    引数：こうかとんRectかばくだんRect
+    戻り値：タプル（横方向判定結果、縦方向判定結果）
+    画面内ならTrue、画面外ならFalse
+    """
+    yoko, tate = True, True
+    if rct.left < 0 or WIDTH < rct.right:  # 横方向判定
+        yoko = False
+    if rct.top < 0 or HEIGHT < rct.bottom:  # 縦方向判定
+        tate = False
+    return yoko, tate
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -33,6 +47,9 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
+        if kk_rct.colliderect(bb_rct):  # 衝突判定
+            print("はい、増税！")
+            return
         screen.blit(bg_img, [0, 0]) 
 
         key_lst = pg.key.get_pressed()
@@ -43,8 +60,16 @@ def main():
                 sum_mv[1] += v[1]
         kk_rct.move_ip(sum_mv)
         screen.blit(kk_img, kk_rct)
+        if check_bound(kk_rct) != (True, True):
+            kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         bb_rct.move_ip(vx, vy)
         screen.blit(bb_img, bb_rct)
+        yoko, tate = check_bound(bb_rct)
+        if not yoko:
+            vx *= -1.05
+        if not tate:
+            vy *= -1.05
+
         pg.display.update()
         tmr += 1
         clock.tick(50)
