@@ -1,5 +1,6 @@
 import os
 import random
+import time
 import sys
 import pygame as pg
 
@@ -50,6 +51,23 @@ def move_kk():
     #         return MODEL[i]
 
 
+def game_over(screen):
+    black_img = pg.Surface((WIDTH, HEIGHT))
+    pg.draw.rect(black_img, (0, 0, 0), (0, 0, WIDTH, HEIGHT))
+    black_img.set_alpha(100)
+    black_rct = black_img.get_rect()
+    fonto = pg.font.Font(None, 80)
+    txt = fonto.render("Gmae Over",
+                    True, (255, 255, 255))
+    kk_cry_img = pg.transform.rotozoom(pg.image.load("fig/8.png"), 0, 2.0)
+    screen.blit(black_img, black_rct)
+    screen.blit(txt, [WIDTH/2-120, HEIGHT/2])
+    screen.blit(kk_cry_img, [WIDTH/4+50, HEIGHT/2])
+    screen.blit(kk_cry_img, [WIDTH*3/4, HEIGHT/2])
+    pg.display.update()
+    time.sleep(5)
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -63,6 +81,14 @@ def main():
     bb_rct = bb_img.get_rect()
     bb_rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
     vx, vy = +5, +5
+    # black_img = pg.Surface((WIDTH, HEIGHT))
+    # pg.draw.rect(black_img, (0, 0, 0), (0, 0, WIDTH, HEIGHT))
+    # black_img.set_alpha(100)
+    # black_rct = black_img.get_rect()
+    # fonto = pg.font.Font(None, 80)
+    # txt = fonto.render("Gmae Over",
+    #                    True, (255, 255, 255))
+    # kk_cry_img = pg.transform.rotozoom("fig/8.png", 0, 2.0)
     clock = pg.time.Clock()
     tmr = 0
     while True:
@@ -70,6 +96,7 @@ def main():
             if event.type == pg.QUIT: 
                 return
         if kk_rct.colliderect(bb_rct):  # 衝突判定
+            game_over(screen)
             print("はい、増税！")
             return
         screen.blit(bg_img, [0, 0]) 
