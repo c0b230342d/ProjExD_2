@@ -6,6 +6,7 @@ import pygame as pg
 
 
 WIDTH, HEIGHT = 1600, 900
+# accs = [a for a in range(1, 11)]
 DELTA = {  # 移動量辞書
     pg.K_UP: (0, -5), 
     pg.K_DOWN: (0, +5), 
@@ -29,9 +30,8 @@ def check_bound(rct: pg.rect) -> tuple[bool, bool]:
     return yoko, tate
 
 
-def move_kk():
+def move_kk() -> dict:
     """
-    引数：こうかとんのmove_ip
     戻り値：辞書（押下キーに対する移動量の合計タプルをキー）
     """
     # kk = tuple(x)
@@ -46,12 +46,13 @@ def move_kk():
         (-5, -5): pg.transform.rotozoom(pg.image.load("fig/3.png"), -45, 2.0),
     }
     return MODEL
-    # for i in MODEL.keys():
-    #     if kk in i:
-    #         return MODEL[i]
 
 
-def game_over(screen):
+def game_over(screen) -> None:
+    """
+    引数：displayのサイズ
+    黒い画面と文字、こうかとんの表示と5秒間の表示をさせる
+    """
     black_img = pg.Surface((WIDTH, HEIGHT))
     pg.draw.rect(black_img, (0, 0, 0), (0, 0, WIDTH, HEIGHT))
     black_img.set_alpha(100)
@@ -81,14 +82,6 @@ def main():
     bb_rct = bb_img.get_rect()
     bb_rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
     vx, vy = +5, +5
-    # black_img = pg.Surface((WIDTH, HEIGHT))
-    # pg.draw.rect(black_img, (0, 0, 0), (0, 0, WIDTH, HEIGHT))
-    # black_img.set_alpha(100)
-    # black_rct = black_img.get_rect()
-    # fonto = pg.font.Font(None, 80)
-    # txt = fonto.render("Gmae Over",
-    #                    True, (255, 255, 255))
-    # kk_cry_img = pg.transform.rotozoom("fig/8.png", 0, 2.0)
     clock = pg.time.Clock()
     tmr = 0
     while True:
