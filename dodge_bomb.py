@@ -28,6 +28,28 @@ def check_bound(rct: pg.rect) -> tuple[bool, bool]:
     return yoko, tate
 
 
+def move_kk():
+    """
+    引数：こうかとんのmove_ip
+    戻り値：辞書（押下キーに対する移動量の合計タプルをキー）
+    """
+    # kk = tuple(x)
+    MODEL = {
+        (-5, 0): pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0),
+        (-5, +5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 45, 2.0),
+        (0, +5): pg.transform.rotozoom(pg.transform.flip(pg.image.load("fig/3.png"), True, False), -90, 2.0),
+        (+5, +5): pg.transform.rotozoom(pg.transform.flip(pg.image.load("fig/3.png"), True, False), -45, 2.0),
+        (+5, 0): pg.transform.rotozoom(pg.transform.flip(pg.image.load("fig/3.png"), True, False), 0, 2.0),
+        (+5, -5): pg.transform.rotozoom(pg.transform.flip(pg.image.load("fig/3.png"), True, False), 45, 2.0),
+        (0, -5): pg.transform.rotozoom(pg.transform.flip(pg.image.load("fig/3.png"), True, False), 90, 2.0),
+        (-5, -5): pg.transform.rotozoom(pg.image.load("fig/3.png"), -45, 2.0),
+    }
+    return MODEL
+    # for i in MODEL.keys():
+    #     if kk in i:
+    #         return MODEL[i]
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -59,6 +81,8 @@ def main():
                 sum_mv[0] += v[0]
                 sum_mv[1] += v[1]
         kk_rct.move_ip(sum_mv)
+        if sum_mv != [0, 0]:
+            kk_img = move_kk()[tuple(sum_mv)]
         screen.blit(kk_img, kk_rct)
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
